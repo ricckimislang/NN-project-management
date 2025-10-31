@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
         <BreadCrumbs :url="'/projects'" title="Projects"></BreadCrumbs>
       </div>
       <div class="flex space-x-2">
-        <Button variant="default" size="default">
+        <Button variant="outline" size="default">
           <i class="fa-solid fa-plus"></i> Add Project
         </Button>
         <Button variant="outline" size="default">
