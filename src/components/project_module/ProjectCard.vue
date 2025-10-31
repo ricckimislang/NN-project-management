@@ -1,3 +1,7 @@
+<script setup>
+import { Card } from '@/components/ui/card'
+</script>
+
 <template>
-  <div class="bg-white p-4 rounded-lg shadow-sm"></div>
+  <Card></Card>
 </template>
