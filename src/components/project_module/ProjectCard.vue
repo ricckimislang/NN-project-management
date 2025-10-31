@@ -5,14 +5,18 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import projectImage from '@/assets/images/projects/project-1.jpg'
 </script>
 
 <template>
   <Card class="p-4">
-    <div class="flex items-center space-x-4">
+    <div class="flex space-x-4">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-          <span class="text-muted-foreground">🏢</span>
+        <div class="w-40 h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center">
+          <AspectRatio :ratio="1 / 1">
+            <img class="w-full h-full object-fill" :src="projectImage" alt="" />
+          </AspectRatio>
         </div>
       </div>
 
@@ -27,7 +31,7 @@ import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
         </div>
       </div>
 
-      <div class="flex-1">
+      <div class="flex-1 flex flex-col justify-center">
         <div class="flex justify-between text-xs mb-1">
           <span>Progress</span>
           <span>65%</span>
