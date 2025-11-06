@@ -1,4 +1,5 @@
 <script setup>
+// Imports
 import { ref, reactive, onMounted } from 'vue'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
@@ -10,6 +11,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import projectImage from '@/assets/images/projects/project-1.jpg'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
+// Scripts
 const progress = ref(0)
 
 const projects = reactive([
@@ -70,23 +72,6 @@ const projects = reactive([
     projectManager: 'John Doe',
   },
 ])
-
-const projectForm = reactive({
-  name: '',
-  image: '',
-  description: '',
-  category: '',
-  address: '',
-  branch: '',
-  projectManager: '',
-  client: '',
-  initialProgress: '',
-  tasks: [],
-  startDate: '',
-  endDate: '',
-  status: 'Inactive',
-  notes: '',
-})
 
 onMounted(() => {
   // Animate progress from 0 to 65

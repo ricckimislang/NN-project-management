@@ -1,8 +1,14 @@
 <script setup>
+// Imports
 import AppMain from '@/components/layout/AppMain.vue'
 import ProjectCard from '@/components/project_module/ProjectCard.vue'
 import BreadCrumbs from '@/components/layout/BreadCrumbs.vue'
 import { Button } from '@/components/ui/button'
+import ProjectForm from '@/components/project_module/ProjectForm.vue'
+import { ref } from 'vue'
+
+// Scripts
+const modalOpen = ref(false)
 </script>
 
 <template>
@@ -12,7 +18,7 @@ import { Button } from '@/components/ui/button'
         <BreadCrumbs :url="'/projects'" title="Projects"></BreadCrumbs>
       </div>
       <div class="flex space-x-2">
-        <Button variant="outline" size="default">
+        <Button variant="outline" size="default" @click="modalOpen = true">
           <i class="fa-solid fa-plus"></i> Add Project
         </Button>
         <Button variant="outline" size="default">
@@ -24,5 +30,7 @@ import { Button } from '@/components/ui/button'
       </div>
     </div>
     <ProjectCard />
+    <!-- Modal -->
+    <ProjectForm v-model:open="modalOpen" />
   </AppMain>
 </template>
