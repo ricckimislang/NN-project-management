@@ -97,7 +97,7 @@ const handleFileChange = (event) => {
 
 <template>
   <Dialog v-model:open="isOpen">
-    <DialogContent class="max-w-2xl max-h-[100vh] flex flex-col">
+    <DialogContent class="max-w-2xl max-h-[90vh] flex flex-col">
       <DialogHeader>
         <DialogTitle>Create New Project</DialogTitle>
         <DialogDescription> Fill in the details for the new project. </DialogDescription>
@@ -181,19 +181,11 @@ const handleFileChange = (event) => {
                 required
               />
             </div>
-            <div class="space-y-2">
-              <Label for="startDate">Start Date</Label>
-              <Input id="startDate" type="date" v-model="projectForm.startDate" required />
-            </div>
-            <div class="space-y-2">
-              <Label for="endDate">End Date</Label>
-              <Input id="endDate" type="date" v-model="projectForm.endDate" required />
-            </div>
-            <div class="flex space-x-2 col-span-2">
-              <div class="space-y-2">
+            <div class="flex">
+              <div class="flex-1 space-y-2">
                 <Label for="status">Status</Label>
                 <Select v-model="projectForm.status">
-                  <SelectTrigger>
+                  <SelectTrigger class="w-full">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -203,6 +195,17 @@ const handleFileChange = (event) => {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div class="space-y-2">
+              <Label for="startDate">Start Date</Label>
+              <Input id="startDate" type="date" v-model="projectForm.startDate" required />
+            </div>
+            <div class="space-y-2">
+              <Label for="endDate">End Date</Label>
+              <Input id="endDate" type="date" v-model="projectForm.endDate" required />
+            </div>
+            <div class="flex space-x-2 col-span-2">
               <div class="space-y-2 flex-1">
                 <Label for="image">Project Image</Label>
                 <Input
