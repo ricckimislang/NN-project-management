@@ -11,19 +11,19 @@ const modalOpen = ref(false)
 </script>
 
 <template>
-  <div class="toolbar flex justify-between items-center mb-6">
+  <div class="toolbar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-6">
     <div>
       <BreadCrumbs :url="'/projects'" title="Projects"></BreadCrumbs>
     </div>
-    <div class="flex space-x-2">
-      <Button variant="outline" size="default" @click="modalOpen = true">
-        <i class="fa-solid fa-plus"></i> Add Project
+    <div class="flex flex-wrap gap-2 sm:gap-3">
+      <Button variant="outline" size="default" @click="modalOpen = true" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
+        <i class="fa-solid fa-plus"></i><span class="hidden sm:inline"> Add Project</span>
       </Button>
-      <Button variant="outline" size="default">
-        <i class="fa-solid fa-magnifying-glass"></i> Search
+      <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
+        <i class="fa-solid fa-magnifying-glass"></i><span class="hidden sm:inline"> Search</span>
       </Button>
-      <Button variant="outline" size="default">
-        <i class="fa-solid fa-gear"></i> Filter / Sort
+      <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
+        <i class="fa-solid fa-gear"></i><span class="hidden sm:inline"> Filter / Sort</span>
       </Button>
     </div>
   </div>

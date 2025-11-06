@@ -1,6 +1,6 @@
 <script setup>
 // Imports
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
@@ -10,12 +10,15 @@ import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import projectImage from '@/assets/images/projects/project-1.jpg'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useIntersectionObserver } from '@vueuse/core'
+import { useIntersectionObserver, useBreakpoints } from '@vueuse/core'
 
 // Scripts
 const progress = ref(0)
 const scrollArea = ref()
 const cardRefs = ref([])
+const breakpoints = useBreakpoints({ sm: 640, md: 768, lg: 1024, xl: 1280, '2xl': 1536 })
+const isBelowLg = breakpoints.smaller('lg')
+const dropdownSide = computed(() => (isBelowLg.value ? 'top' : 'bottom'))
 
 const projects = reactive([
   {
@@ -161,16 +164,18 @@ onMounted(() => {
 
 <template>
   <ScrollArea ref="scrollArea" class="h-[calc(100vh-90px)]">
-    <div class="space-y-4 px-4">
+    <div class="space-y-3 sm:space-y-4 px-2 sm:px-4">
       <div v-for="(project, index) in projects" :key="project.id">
-        <Card class="p-2 md:p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
+        <Card class="p-2 sm:p-3 md:p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
           <div class="flex flex-col">
             <!-- Responsive flex: column on mobile, row on md+ -->
-            <div class="flex flex-col md:flex-row md:space-x-4">
+            <div class="flex flex-col gap-2.5 sm:gap-3 md:flex-row md:gap-4">
               <!-- Image section -->
-              <div class="flex justify-center md:justify-start md:items-center mb-4 md:mb-0">
+              <div
+                class="flex justify-center md:justify-start md:items-center mb-3 sm:mb-4 md:mb-0"
+              >
                 <div
-                  class="w-32 h-32 md:w-40 md:h-full overflow-hidden rounded-lg bg-muted flex items-center justify-center"
+                  class="w-full max-w-[120px] sm:max-w-[160px] md:w-36 md:h-36 lg:w-40 lg:h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center"
                 >
                   <AspectRatio :ratio="1 / 1">
                     <img class="w-full h-full object-cover" :src="project.image" alt="" />
@@ -180,31 +185,37 @@ onMounted(() => {
               <div class="flex flex-col flex-1">
                 <div class="relative flex-1 space-y-2">
                   <!-- Details column -->
-                  <div class="space-y-1">
-                    <h3 class="text-lg md:text-xl font-semibold text-foreground">
+                  <div class="space-y-1 text-center md:text-left">
+                    <h3 class="text-sm sm:text-base md:text-xl font-semibold text-foreground">
                       {{ project.name }}
                     </h3>
-                    <p class="text-sm text-muted-foreground">{{ project.category }}</p>
+                    <p class="text-[11px] sm:text-sm text-muted-foreground">
+                      {{ project.category }}
+                    </p>
                   </div>
-                  <div class="space-y-1">
-                    <p class="text-xs text-muted-foreground">
+                  <div class="space-y-1 text-center md:text-left">
+                    <p class="hidden sm:block text-xs text-muted-foreground">
                       {{ project.branch }}, {{ project.address }}
                     </p>
-                    <p class="text-xs text-muted-foreground">
+                    <p class="text-[11px] sm:text-xs text-muted-foreground">
                       📅 {{ project.startDate }} - {{ project.endDate }}
                     </p>
-                    <p class="text-sm text-muted-foreground">
+                    <p class="text-[11px] sm:text-xs md:text-sm text-muted-foreground">
                       👥 <span class="font-semibold">{{ project.projectManager }}</span>
                     </p>
                   </div>
-                  <!-- Badge and dropdown: responsive positioning -->
-                  <div class="absolute top-2 right-2 flex items-center space-x-2 md:space-x-2">
-                    <Badge variant="success" class="text-xs">{{ project.status }}</Badge>
+                  <!-- Actions: static on mobile, absolute on desktop -->
+                  <div
+                    class="flex items-center justify-between w-full mt-2 md:mt-0 md:w-auto md:absolute md:top-2 md:right-2 md:justify-end space-x-1 sm:space-x-2"
+                  >
+                    <Badge variant="success" class="text-[10px] sm:text-xs">{{
+                      project.status
+                    }}</Badge>
                     <div class="relative">
-                      <AppDropdownMenu>
+                      <AppDropdownMenu :side="dropdownSide">
                         <template #trigger>
-                          <Button variant="ghost" size="sm" class="h-8 w-8 p-0">
-                            <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
+                          <Button variant="ghost" size="sm" class="h-7 w-7 sm:h-8 sm:w-8 p-0">
+                            <i class="fa-solid fa-ellipsis-vertical text-xs sm:text-sm"></i>
                           </Button>
                         </template>
                         <template #content>
@@ -219,8 +230,8 @@ onMounted(() => {
                     </div>
                   </div>
                   <!-- Progress bar -->
-                  <div class="flex flex-col justify-end flex-1 mt-4">
-                    <div class="flex justify-between text-xs mb-1">
+                  <div class="flex flex-col justify-end flex-1 mt-3 sm:mt-4">
+                    <div class="flex justify-between text-[11px] sm:text-xs mb-1">
                       <span>Progress</span>
                       <span>{{ Math.round(progress) }}%</span>
                     </div>

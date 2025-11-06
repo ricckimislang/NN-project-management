@@ -97,14 +97,14 @@ const handleFileChange = (event) => {
 
 <template>
   <Dialog v-model:open="isOpen">
-    <DialogContent class="max-w-2xl max-h-[90vh] flex flex-col">
+    <DialogContent class="w-[95vw] sm:w-[640px] md:w-[768px] lg:w-[896px] max-w-full max-h-[90vh] flex flex-col p-4 sm:p-6">
       <DialogHeader>
         <DialogTitle>Create New Project</DialogTitle>
         <DialogDescription> Fill in the details for the new project. </DialogDescription>
       </DialogHeader>
       <div class="flex-1 overflow-y-auto scrollbar-hide">
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div class="space-y-2">
               <Label for="name">Project Name</Label>
               <Input
