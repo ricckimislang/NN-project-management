@@ -201,7 +201,7 @@ onMounted(() => {
                   <div class="absolute top-2 right-2 flex items-center space-x-2">
                     <Badge variant="success">{{ project.status }}</Badge>
                     <div class="relative">
-                      <AppDropdownMenu side="left">
+                      <AppDropdownMenu side="bottom">
                         <template #trigger>
                           <Button variant="ghost" size="sm">
                             <i class="fa-solid fa-ellipsis-vertical"></i>
