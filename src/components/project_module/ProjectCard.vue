@@ -17,43 +17,76 @@ const projects = reactive([
     id: 1,
     name: 'Downtown Office Renovation',
     description: 'Renovation',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Napala',
     image: projectImage,
     startDate: '2024-01-15',
     endDate: '2024-06-30',
     status: 'In Progress',
     progress: 65,
+    projectManager: 'John Doe',
   },
   {
     id: 2,
     name: 'General Hospital',
-    description: 'Development',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Napala',
     image: projectImage,
     startDate: '2024-01-20',
     endDate: '2024-08-30',
     status: 'In Progress',
     progress: 35,
+    projectManager: 'John Doe',
   },
   {
     id: 3,
     name: 'General Hospital',
-    description: 'Development',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Kulinas',
     image: projectImage,
     startDate: '2024-01-20',
     endDate: '2024-08-30',
     status: 'In Progress',
     progress: 35,
+    projectManager: 'John Doe',
   },
   {
     id: 4,
     name: 'General Hospital',
-    description: 'Development',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Kulinas',
     image: projectImage,
     startDate: '2024-01-20',
     endDate: '2024-08-30',
     status: 'In Progress',
     progress: 35,
+    projectManager: 'John Doe',
   },
 ])
+
+const projectForm = reactive({
+  name: '',
+  image: '',
+  description: '',
+  category: '',
+  address: '',
+  branch: '',
+  projectManager: '',
+  client: '',
+  initialProgress: '',
+  tasks: [],
+  startDate: '',
+  endDate: '',
+  status: 'Inactive',
+  notes: '',
+})
 
 onMounted(() => {
   // Animate progress from 0 to 65
@@ -81,7 +114,7 @@ onMounted(() => {
               <!-- Top row: image and details -->
               <div class="flex items-center space-x-3">
                 <div
-                  class="w-40 h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center"
+                  class="w-40 h-full overflow-hidden rounded-lg bg-muted flex items-center justify-center"
                 >
                   <AspectRatio :ratio="1 / 1">
                     <img class="w-full h-full object-fill" :src="project.image" alt="" />
@@ -95,13 +128,18 @@ onMounted(() => {
                     <h3 class="text-base text-xl font-semibold text-foreground">
                       {{ project.name }}
                     </h3>
-                    <p class="text-sm text-muted-foreground">{{ project.description }}</p>
+                    <p class="text-sm text-muted-foreground">{{ project.category }}</p>
                   </div>
                   <div class="space-x-1">
-                    <p class="text-sm text-muted-foreground">
+                    <p class="text-xs text-muted-foreground">
+                      {{ project.branch }},&nbsp;{{ project.address }}
+                    </p>
+                    <p class="text-xs text-muted-foreground">
                       📅 {{ project.startDate }} - {{ project.endDate }}
                     </p>
-                    <p class="text-sm text-muted-foreground">👥 Sarah Johnson</p>
+                    <p class="text-sm text-muted-foreground">
+                      👥 <span class="font-semibold">{{ project.projectManager }}</span>
+                    </p>
                   </div>
                   <!-- Badge and dropdown moved to absolute position -->
                   <div class="absolute top-2 right-2 flex items-center space-x-2">
