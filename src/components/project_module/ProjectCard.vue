@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
@@ -7,6 +8,22 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import projectImage from '@/assets/images/projects/project-1.jpg'
+
+const progress = ref(0)
+
+onMounted(() => {
+  // Animate progress from 0 to 65
+  const target = 65
+  const duration = 300 // 1.5 seconds
+  const increment = target / (duration / 16) // ~60fps
+  const timer = setInterval(() => {
+    progress.value += increment
+    if (progress.value >= target) {
+      progress.value = target
+      clearInterval(timer)
+    }
+  }, 16)
+})
 </script>
 
 <template>
@@ -39,30 +56,30 @@ import projectImage from '@/assets/images/projects/project-1.jpg'
             </div>
             <!-- Badge and dropdown moved to absolute position -->
             <div class="absolute top-2 right-2 flex items-center space-x-2">
-              <Badge variant="success">Active</Badge>
-            <div class="relative">
-              <AppDropdownMenu side="left">
-                <template #trigger>
-                  <Button variant="ghost" size="sm">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                  </Button>
-                </template>
-                <template #content>
-                  <DropdownMenuItem>View</DropdownMenuItem>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Archive</DropdownMenuItem>
-                  <DropdownMenuItem class="text-destructive">Delete</DropdownMenuItem>
-                </template>
-              </AppDropdownMenu>
-            </div>
+              <Badge variant="success">In Progress</Badge>
+              <div class="relative">
+                <AppDropdownMenu side="left">
+                  <template #trigger>
+                    <Button variant="ghost" size="sm">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </Button>
+                  </template>
+                  <template #content>
+                    <DropdownMenuItem>View</DropdownMenuItem>
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>Archive</DropdownMenuItem>
+                    <DropdownMenuItem class="text-destructive">Delete</DropdownMenuItem>
+                  </template>
+                </AppDropdownMenu>
+              </div>
             </div>
             <!-- Progress bar at the bottom of details -->
             <div class="flex flex-col justify-end flex-1 mt-4">
               <div class="flex justify-between text-xs mb-1">
                 <span>Progress</span>
-                <span>65%</span>
+                <span>{{ Math.round(progress) }}%</span>
               </div>
-              <Progress :value="65" />
+              <Progress :value="progress" />
             </div>
           </div>
         </div>
