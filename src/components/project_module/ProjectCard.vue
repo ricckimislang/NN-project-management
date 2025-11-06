@@ -163,32 +163,32 @@ onMounted(() => {
   <ScrollArea ref="scrollArea" class="h-[calc(100vh-90px)]">
     <div class="space-y-4 px-4">
       <div v-for="(project, index) in projects" :key="project.id">
-        <Card class="p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
+        <Card class="p-2 md:p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
           <div class="flex flex-col">
-            <!-- Changed to vertical flex -->
-            <div class="flex space-x-4">
-              <!-- Top row: image and details -->
-              <div class="flex items-center space-x-3">
+            <!-- Responsive flex: column on mobile, row on md+ -->
+            <div class="flex flex-col md:flex-row md:space-x-4">
+              <!-- Image section -->
+              <div class="flex justify-center md:justify-start md:items-center mb-4 md:mb-0">
                 <div
-                  class="w-40 h-full overflow-hidden rounded-lg bg-muted flex items-center justify-center"
+                  class="w-32 h-32 md:w-40 md:h-full overflow-hidden rounded-lg bg-muted flex items-center justify-center"
                 >
                   <AspectRatio :ratio="1 / 1">
-                    <img class="w-full h-full object-fill" :src="project.image" alt="" />
+                    <img class="w-full h-full object-cover" :src="project.image" alt="" />
                   </AspectRatio>
                 </div>
               </div>
               <div class="flex flex-col flex-1">
                 <div class="relative flex-1 space-y-2">
-                  <!-- Details column with relative positioning -->
+                  <!-- Details column -->
                   <div class="space-y-1">
-                    <h3 class="text-base text-xl font-semibold text-foreground">
+                    <h3 class="text-lg md:text-xl font-semibold text-foreground">
                       {{ project.name }}
                     </h3>
                     <p class="text-sm text-muted-foreground">{{ project.category }}</p>
                   </div>
-                  <div class="space-x-1">
+                  <div class="space-y-1">
                     <p class="text-xs text-muted-foreground">
-                      {{ project.branch }},&nbsp;{{ project.address }}
+                      {{ project.branch }}, {{ project.address }}
                     </p>
                     <p class="text-xs text-muted-foreground">
                       📅 {{ project.startDate }} - {{ project.endDate }}
@@ -197,26 +197,28 @@ onMounted(() => {
                       👥 <span class="font-semibold">{{ project.projectManager }}</span>
                     </p>
                   </div>
-                  <!-- Badge and dropdown moved to absolute position -->
-                  <div class="absolute top-2 right-2 flex items-center space-x-2">
-                    <Badge variant="success">{{ project.status }}</Badge>
+                  <!-- Badge and dropdown: responsive positioning -->
+                  <div class="absolute top-2 right-2 flex items-center space-x-2 md:space-x-2">
+                    <Badge variant="success" class="text-xs">{{ project.status }}</Badge>
                     <div class="relative">
-                      <AppDropdownMenu side="bottom">
+                      <AppDropdownMenu>
                         <template #trigger>
-                          <Button variant="ghost" size="sm">
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                          <Button variant="ghost" size="sm" class="h-8 w-8 p-0">
+                            <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                           </Button>
                         </template>
                         <template #content>
-                          <DropdownMenuItem>View</DropdownMenuItem>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Archive</DropdownMenuItem>
-                          <DropdownMenuItem class="text-destructive">Delete</DropdownMenuItem>
+                          <DropdownMenuItem class="text-sm">View</DropdownMenuItem>
+                          <DropdownMenuItem class="text-sm">Edit</DropdownMenuItem>
+                          <DropdownMenuItem class="text-sm">Archive</DropdownMenuItem>
+                          <DropdownMenuItem class="text-destructive text-sm">
+                            Delete
+                          </DropdownMenuItem>
                         </template>
                       </AppDropdownMenu>
                     </div>
                   </div>
-                  <!-- Progress bar at the bottom of details -->
+                  <!-- Progress bar -->
                   <div class="flex flex-col justify-end flex-1 mt-4">
                     <div class="flex justify-between text-xs mb-1">
                       <span>Progress</span>
