@@ -10,9 +10,12 @@ import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import projectImage from '@/assets/images/projects/project-1.jpg'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useIntersectionObserver } from '@vueuse/core'
 
 // Scripts
 const progress = ref(0)
+const scrollArea = ref()
+const cardRefs = ref([])
 
 const projects = reactive([
   {
@@ -71,9 +74,77 @@ const projects = reactive([
     progress: 35,
     projectManager: 'John Doe',
   },
+  {
+    id: 5,
+    name: 'General Hospital',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Kulinas',
+    image: projectImage,
+    startDate: '2024-01-20',
+    endDate: '2024-08-30',
+    status: 'In Progress',
+    progress: 35,
+    projectManager: 'John Doe',
+  },
+  {
+    id: 6,
+    name: 'General Hospital',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Kulinas',
+    image: projectImage,
+    startDate: '2024-01-20',
+    endDate: '2024-08-30',
+    status: 'In Progress',
+    progress: 35,
+    projectManager: 'John Doe',
+  },
+  {
+    id: 7,
+    name: 'General Hospital',
+    description: 'Hospital Rooms',
+    category: 'Development',
+    address: 'General Santos City',
+    branch: 'Kulinas',
+    image: projectImage,
+    startDate: '2024-01-20',
+    endDate: '2024-08-30',
+    status: 'In Progress',
+    progress: 35,
+    projectManager: 'John Doe',
+  },
 ])
 
 onMounted(() => {
+  // Get the scrollable viewport
+  const viewport = scrollArea.value.$el.querySelector('[data-slot="scroll-area-viewport"]')
+
+  // Set up intersection observer for scroll animations
+  useIntersectionObserver(
+    cardRefs.value,
+    (entries) => {
+      entries.forEach((entry, index) => {
+        const el = entry.target
+        if (entry.isIntersecting) {
+          // Staggered animation on enter
+          setTimeout(() => {
+            el.classList.add('animate-fade-in-up')
+          }, index * 200)
+        } else {
+          // Fade out on exit
+          el.classList.remove('animate-fade-in-up')
+        }
+      })
+    },
+    {
+      root: viewport,
+      threshold: 0.1,
+    },
+  )
+
   // Animate progress from 0 to 65
   const target = 65
   const duration = 300 // .3 seconds
@@ -89,10 +160,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <ScrollArea class="h-[calc(100vh-90px)]">
+  <ScrollArea ref="scrollArea" class="h-[calc(100vh-90px)]">
     <div class="space-y-4 px-4">
-      <div v-for="project in projects" :key="project.id">
-        <Card class="p-4">
+      <div v-for="(project, index) in projects" :key="project.id">
+        <Card class="p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
           <div class="flex flex-col">
             <!-- Changed to vertical flex -->
             <div class="flex space-x-4">
@@ -162,3 +233,20 @@ onMounted(() => {
     </div>
   </ScrollArea>
 </template>
+
+<style scoped>
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
