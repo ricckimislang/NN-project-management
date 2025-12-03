@@ -4,13 +4,31 @@ import ProjectCard from '@/components/project_module/ProjectCard.vue'
 import BreadCrumbs from '@/components/layout/BreadCrumbs.vue'
 import { Button } from '@/components/ui/button'
 import ProjectForm from '@/components/project_module/ProjectForm.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Input } from '@/components/ui/input'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
 
 // Scripts
 const modalOpen = ref(false)
 const searchOpen = ref(false)
 const searchQuery = ref('')
+const statusFilter = ref('')
+const sortMode = ref('completed') // 'completed' | 'inProgress' | 'notStarted' | 'name' | 'progress'
+const dropdownSide = 'bottom'
+
+const handleStatusFilterChange = (status) => {
+  statusFilter.value = status
+}
+
+const handleSortChange = (mode) => {
+  sortMode.value = mode
+}
+
+const statusFilterLabel = computed(() => {
+  if (!statusFilter.value) return 'All statuses'
+  return statusFilter.value
+})
 </script>
 
 <template>
@@ -45,12 +63,155 @@ const searchQuery = ref('')
           </div>
         </Transition>
       </div>
-      <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
-        <i class="fa-solid fa-gear"></i><span class="hidden sm:inline"> Filter / Sort</span>
-      </Button>
+      <!-- filter -->
+      <div class="flex items-center gap-2">
+        <AppDropdownMenu :side="dropdownSide">
+          <template #trigger>
+            <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
+              <i class="fa-solid fa-filter"></i><span class="hidden sm:inline">Filter</span>
+            </Button>
+          </template>
+          <template #content>
+            <DropdownMenuItem
+              class="text-sm flex items-center gap-2 justify-center"
+              @select="
+                (event) => {
+                  event.preventDefault()
+                  handleStatusFilterChange('')
+                }
+              "
+            >
+              <span>All statuses</span>
+              <span
+                class="inline-block w-2 h-2 rounded-full bg-green-500"
+                v-if="statusFilter === ''"
+              ></span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              class="flex items-center gap-2 justify-center"
+              @select="
+                (event) => {
+                  event.preventDefault()
+                  handleStatusFilterChange('Completed')
+                }
+              "
+            >
+              <span>Completed</span>
+              <span
+                class="inline-block w-2 h-2 rounded-full bg-green-500"
+                v-if="statusFilter === 'Completed'"
+              ></span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              class="flex items-center gap-2 justify-center"
+              @select="
+                (event) => {
+                  event.preventDefault()
+                  handleStatusFilterChange('In Progress')
+                }
+              "
+            >
+              <span>In Progress</span>
+              <span
+                class="inline-block w-2 h-2 rounded-full bg-green-500"
+                v-if="statusFilter === 'In Progress'"
+              ></span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              class="flex items-center gap-2 justify-center"
+              @select="
+                (event) => {
+                  event.preventDefault()
+                  handleStatusFilterChange('Not Started')
+                }
+              "
+            >
+              <span>Not Started</span>
+              <span
+                class="inline-block w-2 h-2 rounded-full bg-green-500"
+                v-if="statusFilter === 'Not Started'"
+              ></span>
+            </DropdownMenuItem>
+          </template>
+        </AppDropdownMenu>
+        <span class="text-xs sm:text-sm text-muted-foreground"
+          >Filter: {{ statusFilterLabel }}</span
+        >
+      </div>
+      <!-- sort -->
+      <AppDropdownMenu :side="dropdownSide">
+        <template #trigger>
+          <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
+            <i class="fa-solid fa-sort"></i><span class="hidden sm:inline">Sort</span>
+          </Button>
+        </template>
+        <template #content>
+          <DropdownMenuItem
+            class="text-sm flex items-center gap-2 justify-center"
+            @select="
+              (event) => {
+                event.preventDefault()
+                handleSortChange('completed')
+              }
+            "
+          >
+            <span>Completed</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            class="text-sm flex items-center gap-2 justify-center"
+            @select="
+              (event) => {
+                event.preventDefault()
+                handleSortChange('inProgress')
+              }
+            "
+          >
+            <span>In Progress</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            class="text-sm flex items-center gap-2 justify-center"
+            @select="
+              (event) => {
+                event.preventDefault()
+                handleSortChange('notStarted')
+              }
+            "
+          >
+            <span>Not Started</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            class="text-sm flex items-center gap-2 justify-center"
+            @select="
+              (event) => {
+                event.preventDefault()
+                handleSortChange('name')
+              }
+            "
+          >
+            <span>Name (A–Z)</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            class="text-sm flex items-center gap-2 justify-center"
+            @select="
+              (event) => {
+                event.preventDefault()
+                handleSortChange('progress')
+              }
+            "
+          >
+            <span>Progress (high → low)</span>
+          </DropdownMenuItem>
+        </template>
+      </AppDropdownMenu>
     </div>
   </div>
-  <ProjectCard />
+  <ProjectCard :search-query="searchQuery" :status-filter="statusFilter" :sort-mode="sortMode" />
   <!-- Modal -->
   <ProjectForm v-model:open="modalOpen" />
 </template>

@@ -13,6 +13,22 @@ import { useIntersectionObserver, useBreakpoints } from '@vueuse/core'
 
 import { projectData } from '@/data/projectData'
 
+// Props
+const props = defineProps({
+  searchQuery: {
+    type: String,
+    default: '',
+  },
+  statusFilter: {
+    type: String,
+    default: '',
+  },
+  sortMode: {
+    type: String,
+    default: 'completed', // 'completed' | 'inProgress' | 'notStarted' | 'name' | 'progress'
+  },
+})
+
 // Scripts
 const scrollArea = ref()
 const cardRefs = ref([])
@@ -49,6 +65,80 @@ const badgeVariant = (status) => {
       return 'default'
   }
 }
+
+const filteredProjects = computed(() => {
+  const query = props.searchQuery.trim().toLowerCase()
+  const status = props.statusFilter
+
+  let result = [...projects]
+
+  if (status) {
+    result = result.filter((project) => project.status === status)
+  }
+
+  if (query) {
+    result = result.filter((project) => {
+      return (
+        project.name.toLowerCase().includes(query) ||
+        project.category.toLowerCase().includes(query) ||
+        project.branch.toLowerCase().includes(query) ||
+        project.address.toLowerCase().includes(query) ||
+        project.projectManager.toLowerCase().includes(query)
+      )
+    })
+  }
+
+  // Sorting
+  if (props.sortMode === 'name') {
+    return result.sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  if (props.sortMode === 'progress') {
+    // Higher progress first
+    return result.sort((a, b) => b.progress - a.progress || a.name.localeCompare(b.name))
+  }
+
+  // Status-based modes
+  let statusPriority
+
+  if (props.sortMode === 'completed') {
+    statusPriority = {
+      Completed: 0,
+      'In Progress': 1,
+      'Not Started': 2,
+    }
+  } else if (props.sortMode === 'inProgress') {
+    statusPriority = {
+      'In Progress': 0,
+      Completed: 1,
+      'Not Started': 2,
+    }
+  } else if (props.sortMode === 'notStarted') {
+    statusPriority = {
+      'Not Started': 0,
+      'In Progress': 1,
+      Completed: 2,
+    }
+  } else {
+    // Fallback to completed-first
+    statusPriority = {
+      Completed: 0,
+      'In Progress': 1,
+      'Not Started': 2,
+    }
+  }
+
+  return result.sort((a, b) => {
+    const aPriority = statusPriority[a.status] ?? 99
+    const bPriority = statusPriority[b.status] ?? 99
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority
+    }
+
+    return a.name.localeCompare(b.name)
+  })
+})
 
 onMounted(() => {
   // Get the scrollable viewport
@@ -94,7 +184,7 @@ onUnmounted(() => {
 <template>
   <ScrollArea ref="scrollArea" class="h-[calc(100vh-90px)]">
     <div class="space-y-3 sm:space-y-4 px-2 sm:px-4">
-      <div v-for="(project, index) in projects" :key="project.id">
+      <div v-for="(project, index) in filteredProjects" :key="project.id">
         <Card class="p-2 sm:p-3 md:p-4 opacity-0" :ref="(el) => (cardRefs[index] = el)">
           <div class="flex flex-col">
             <!-- Responsive flex: column on mobile, row on md+ -->
