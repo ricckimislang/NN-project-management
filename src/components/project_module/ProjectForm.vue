@@ -77,6 +77,7 @@ const validateForm = () => {
 const handleSubmit = () => {
   if (validateForm()) {
     // Handle form submission
+    alert(projectForm.name + ' Project is created')
     console.log('Form is valid:', projectForm)
     // Reset form or close modal
     emit('update:open', false)
@@ -97,8 +98,10 @@ const handleFileChange = (event) => {
 
 <template>
   <Dialog v-model:open="isOpen">
-    <DialogContent class="w-[95vw] sm:w-[640px] md:w-[768px] lg:w-[896px] max-w-full max-h-[90vh] flex flex-col p-4 sm:p-6">
-      <DialogHeader>
+    <DialogContent
+      class="w-[95vw] sm:w-[640px] md:w-3xl lg:w-4xl max-w-full max-h-[90vh] flex flex-col p-4 sm:p-6"
+    >
+      <DialogHeader class="mb-4 border-b-2 border-b-black">
         <DialogTitle>Create New Project</DialogTitle>
         <DialogDescription> Fill in the details for the new project. </DialogDescription>
       </DialogHeader>
@@ -189,7 +192,7 @@ const handleFileChange = (event) => {
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Inactive">Inactive</SelectItem>
+                    <SelectItem value="Not Started">Not Started</SelectItem>
                     <SelectItem value="In Progress">In Progress</SelectItem>
                     <SelectItem value="Completed">Completed</SelectItem>
                   </SelectContent>
