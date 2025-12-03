@@ -10,6 +10,21 @@ import AppDropdownMenu from '@/components/layout/AppDropdownMenu.vue'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useIntersectionObserver, useBreakpoints } from '@vueuse/core'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from '@/components/ui/dialog'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 import { projectData } from '@/data/projectData'
 
@@ -140,6 +155,28 @@ const filteredProjects = computed(() => {
   })
 })
 
+// Dialog state
+const isDeleteDialogOpen = ref(false)
+const isViewDialogOpen = ref(false)
+const selectedProject = ref(null)
+
+const handleDelete = (projectId) => {
+  selectedProject.value = projectId
+  isDeleteDialogOpen.value = true
+}
+
+const handleView = (project) => {
+  selectedProject.value = project
+  isViewDialogOpen.value = true
+}
+
+const confirmDelete = (projectId) => {
+  // TODO: Implement actual delete logic
+  console.log('Deleting project:', projectId)
+  isDeleteDialogOpen.value = false
+  selectedProject.value = null
+}
+
 onMounted(() => {
   // Get the scrollable viewport
   const viewport = scrollArea.value.$el.querySelector('[data-slot="scroll-area-viewport"]')
@@ -241,10 +278,14 @@ onUnmounted(() => {
                           </Button>
                         </template>
                         <template #content>
-                          <DropdownMenuItem class="text-sm">View</DropdownMenuItem>
+                          <DropdownMenuItem class="text-sm" @click="handleView(project)"
+                            >View</DropdownMenuItem
+                          >
                           <DropdownMenuItem class="text-sm">Edit</DropdownMenuItem>
-                          <DropdownMenuItem class="text-sm">Archive</DropdownMenuItem>
-                          <DropdownMenuItem class="text-destructive text-sm">
+                          <DropdownMenuItem
+                            class="text-destructive text-sm"
+                            @click="handleDelete(project.id)"
+                          >
                             Delete
                           </DropdownMenuItem>
                         </template>
@@ -266,6 +307,184 @@ onUnmounted(() => {
         </Card>
       </div>
     </div>
+
+    <!-- Delete Dialog -->
+    <Dialog v-model:open="isDeleteDialogOpen">
+      <DialogContent :class="'w-100 max-w-md'">
+        <DialogHeader>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this project? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="destructive" @click="confirmDelete(projectToDelete)"> Delete </Button>
+          <DialogClose>
+            <Button type="button" variant="secondary"> Close </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
+    <!-- View Dialog -->
+    <Dialog v-model:open="isViewDialogOpen">
+      <DialogContent class="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle class="text-2xl font-bold">Project Details</DialogTitle>
+        </DialogHeader>
+
+        <div v-if="selectedProject" class="space-y-6">
+          <!-- Project Header with Image -->
+          <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Project Image -->
+            <div class="lg:w-1/3">
+              <div class="aspect-square rounded-lg overflow-hidden bg-muted">
+                <img
+                  :src="selectedProject.image"
+                  :alt="selectedProject.name"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <!-- Project Info -->
+            <div class="lg:w-2/3 space-y-4">
+              <div>
+                <h2 class="text-2xl font-semibold text-foreground mb-2">
+                  {{ selectedProject.name }}
+                </h2>
+                <Badge :variant="badgeVariant(selectedProject.status)" class="text-sm">
+                  {{ selectedProject.status }}
+                </Badge>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h3 class="text-sm font-medium text-muted-foreground mb-1">Category</h3>
+                  <p class="text-base">{{ selectedProject.category }}</p>
+                </div>
+                <div>
+                  <h3 class="text-sm font-medium text-muted-foreground mb-1">Project Manager</h3>
+                  <p class="text-base">{{ selectedProject.projectManager }}</p>
+                </div>
+                <div>
+                  <h3 class="text-sm font-medium text-muted-foreground mb-1">Location</h3>
+                  <p class="text-base">
+                    {{ selectedProject.branch }}, {{ selectedProject.address }}
+                  </p>
+                </div>
+                <div>
+                  <h3 class="text-sm font-medium text-muted-foreground mb-1">Duration</h3>
+                  <p class="text-base">
+                    {{ selectedProject.startDate }} - {{ selectedProject.endDate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Description -->
+          <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold mb-3">Project Description</h3>
+            <p class="text-muted-foreground leading-relaxed">
+              {{ selectedProject.description || 'No description available for this project.' }}
+            </p>
+          </div>
+
+          <!-- Progress Section -->
+          <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold mb-3">Project Progress</h3>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span>Overall Progress</span>
+                <span class="font-medium">{{ selectedProject.progress }}%</span>
+              </div>
+              <Progress :value="selectedProject.progress" class="h-2" />
+            </div>
+          </div>
+
+          <!-- Additional Details (if available) -->
+          <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold mb-3">Additional Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span class="text-muted-foreground">Project ID:</span>
+                <span class="ml-2 font-mono">{{ selectedProject.id }}</span>
+              </div>
+              <div>
+                <span class="text-muted-foreground">Last Updated:</span>
+                <span class="ml-2">{{ new Date().toLocaleDateString() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Workers Section -->
+          <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold mb-3">Project Team</h3>
+            <Accordion type="single" collapsible class="w-full">
+              <AccordionItem value="workers">
+                <AccordionTrigger class="text-left">
+                  <div class="flex items-center justify-between w-full">
+                    <span>Assigned Workers ({{ selectedProject.workers?.length || 0 }})</span>
+                    <Badge variant="outline" class="ml-2">
+                      {{ selectedProject.workers?.length || 0 }} workers
+                    </Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div class="pt-2">
+                    <div
+                      v-if="selectedProject.workers && selectedProject.workers.length > 0"
+                      class="space-y-2"
+                    >
+                      <div
+                        v-for="worker in selectedProject.workers"
+                        :key="worker.id"
+                        class="flex items-center justify-between py-2 px-3 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors"
+                      >
+                        <div class="flex items-center space-x-3">
+                          <div
+                            class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"
+                          >
+                            <span class="text-primary font-medium text-xs">
+                              {{
+                                worker.name
+                                  .split(' ')
+                                  .map((n) => n[0])
+                                  .join('')
+                                  .toUpperCase()
+                              }}
+                            </span>
+                          </div>
+                          <div>
+                            <p class="font-medium text-sm">{{ worker.name }}</p>
+                            <p class="text-xs text-muted-foreground">{{ worker.role }}</p>
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <p class="text-xs font-mono text-muted-foreground">
+                            {{ worker.contact }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="text-center py-8 text-muted-foreground">
+                      <p class="text-sm">No workers assigned to this project yet.</p>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+
+        <DialogFooter class="mt-6">
+          <DialogClose asChild>
+            <Button variant="secondary">Close</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </ScrollArea>
 </template>
 

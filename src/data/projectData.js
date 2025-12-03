@@ -14,6 +14,12 @@ export const projectData = [
     status: 'In Progress',
     progress: 65,
     projectManager: 'John Doe',
+    workers: [
+      { id: 1, name: 'Carlos Santos', role: 'Foreman', contact: '0912-345-6789' },
+      { id: 2, name: 'Ramon Reyes', role: 'Carpenter', contact: '0913-456-7890' },
+      { id: 3, name: 'Jose Martinez', role: 'Electrician', contact: '0914-567-8901' },
+      { id: 4, name: 'Antonio Cruz', role: 'Plumber', contact: '0915-678-9012' },
+    ],
   },
   {
     id: 2,
@@ -28,6 +34,11 @@ export const projectData = [
     status: 'Completed',
     progress: 100,
     projectManager: 'Sarah Johnson',
+    workers: [
+      { id: 5, name: 'Miguel Torres', role: 'Foreman', contact: '0916-789-0123' },
+      { id: 6, name: 'Juan Dela Cruz', role: 'Mason', contact: '0917-890-1234' },
+      { id: 7, name: 'Pedro Santos', role: 'Painter', contact: '0918-901-2345' },
+    ],
   },
   {
     id: 3,
@@ -42,6 +53,18 @@ export const projectData = [
     status: 'In Progress',
     progress: 30,
     projectManager: 'Michael Tan',
+    workers: [
+      { id: 8, name: 'Roberto Garcia', role: 'Site Engineer', contact: '0919-012-3456' },
+      { id: 9, name: 'Francisco Lim', role: 'Foreman', contact: '0920-123-4567' },
+      { id: 10, name: 'Alberto Reyes', role: 'Welder', contact: '0921-234-5678' },
+      { id: 11, name: 'Manuel Cruz', role: 'Electrician', contact: '0922-345-6789' },
+      {
+        id: 12,
+        name: 'Ricardo Santos',
+        role: 'Heavy Equipment Operator',
+        contact: '0923-456-7890',
+      },
+    ],
   },
   {
     id: 4,
@@ -56,6 +79,12 @@ export const projectData = [
     status: 'In Progress',
     progress: 75,
     projectManager: 'Robert Garcia',
+    workers: [
+      { id: 13, name: 'Fernando Martinez', role: 'Foreman', contact: '0924-567-8901' },
+      { id: 14, name: 'Carlos Reyes', role: 'Carpenter', contact: '0925-678-9012' },
+      { id: 15, name: 'Jose Antonio', role: 'Mason', contact: '0926-789-0123' },
+      { id: 16, name: 'Miguel Cruz', role: 'Painter', contact: '0927-890-1234' },
+    ],
   },
   {
     id: 5,
@@ -70,6 +99,11 @@ export const projectData = [
     status: 'In Progress',
     progress: 25,
     projectManager: 'Elizabeth Reyes',
+    workers: [
+      { id: 17, name: 'Roberto Santos', role: 'Restoration Specialist', contact: '0928-901-2345' },
+      { id: 18, name: 'Antonio Martinez', role: 'Carpenter', contact: '0929-012-3456' },
+      { id: 19, name: 'Juan Garcia', role: 'Painter', contact: '0930-123-4567' },
+    ],
   },
   {
     id: 6,
@@ -84,6 +118,14 @@ export const projectData = [
     status: 'In Progress',
     progress: 60,
     projectManager: 'Daniel Lim',
+    workers: [
+      { id: 20, name: 'Francisco Reyes', role: 'Project Engineer', contact: '0931-234-5678' },
+      { id: 21, name: 'Miguel Cruz', role: 'Foreman', contact: '0932-345-6789' },
+      { id: 22, name: 'Carlos Santos', role: 'Steel Worker', contact: '0933-456-7890' },
+      { id: 23, name: 'Roberto Martinez', role: 'Welder', contact: '0934-567-8901' },
+      { id: 24, name: 'Juan Garcia', role: 'Electrician', contact: '0935-678-9012' },
+      { id: 25, name: 'Antonio Reyes', role: 'Plumber', contact: '0936-789-0123' },
+    ],
   },
   {
     id: 7,
@@ -98,6 +140,11 @@ export const projectData = [
     status: 'Not Started',
     progress: 0,
     projectManager: 'Jennifer Sy',
+    workers: [
+      { id: 26, name: 'Manuel Santos', role: 'Site Supervisor', contact: '0937-890-1234' },
+      { id: 27, name: 'Pedro Cruz', role: 'Foreman', contact: '0938-901-2345' },
+      { id: 28, name: 'Ricardo Martinez', role: 'Landscaper', contact: '0939-012-3456' },
+    ],
   },
   {
     id: 8,
@@ -112,6 +159,13 @@ export const projectData = [
     status: 'In Progress',
     progress: 40,
     projectManager: 'Richard Chua',
+    workers: [
+      { id: 29, name: 'Alberto Reyes', role: 'Interior Designer', contact: '0940-123-4567' },
+      { id: 30, name: 'Fernando Santos', role: 'Foreman', contact: '0941-234-5678' },
+      { id: 31, name: 'Carlos Martinez', role: 'Carpenter', contact: '0942-345-6789' },
+      { id: 32, name: 'Juan Cruz', role: 'Painter', contact: '0943-456-7890' },
+      { id: 33, name: 'Roberto Garcia', role: 'Flooring Specialist', contact: '0944-567-8901' },
+    ],
   },
   {
     id: 9,
@@ -126,6 +180,12 @@ export const projectData = [
     status: 'In Progress',
     progress: 55,
     projectManager: 'Patricia Go',
+    workers: [
+      { id: 34, name: 'Miguel Reyes', role: 'IT Infrastructure Lead', contact: '0945-678-9012' },
+      { id: 35, name: 'Antonio Santos', role: 'Foreman', contact: '0946-789-0123' },
+      { id: 36, name: 'Francisco Martinez', role: 'Electrician', contact: '0947-890-1234' },
+      { id: 37, name: 'Carlos Cruz', role: 'Cable Technician', contact: '0948-901-2345' },
+    ],
   },
   {
     id: 10,
@@ -140,6 +200,11 @@ export const projectData = [
     status: 'Not Started',
     progress: 0,
     projectManager: 'William Ong',
+    workers: [
+      { id: 38, name: 'Roberto Santos', role: 'Project Manager', contact: '0949-012-3456' },
+      { id: 39, name: 'Juan Martinez', role: 'Foreman', contact: '0950-123-4567' },
+      { id: 40, name: 'Miguel Garcia', role: 'Mason', contact: '0951-234-5678' },
+    ],
   },
   {
     id: 11,
@@ -154,5 +219,13 @@ export const projectData = [
     status: 'In Progress',
     progress: 70,
     projectManager: 'Michelle Tan',
+    workers: [
+      { id: 41, name: 'Antonio Reyes', role: 'Construction Manager', contact: '0952-345-6789' },
+      { id: 42, name: 'Carlos Cruz', role: 'Foreman', contact: '0953-456-7890' },
+      { id: 43, name: 'Francisco Santos', role: 'Electrician', contact: '0954-567-8901' },
+      { id: 44, name: 'Roberto Martinez', role: 'HVAC Specialist', contact: '0955-678-9012' },
+      { id: 45, name: 'Juan Garcia', role: 'Plumber', contact: '0956-789-0123' },
+      { id: 46, name: 'Miguel Reyes', role: 'Fire Safety Systems', contact: '0957-890-1234' },
+    ],
   },
 ]
