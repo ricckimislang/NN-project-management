@@ -32,28 +32,17 @@ const statusFilterLabel = computed(() => {
 </script>
 
 <template>
-  <div
-    class="toolbar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-6"
-  >
+  <div class="toolbar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-6">
     <div>
       <BreadCrumbs :url="'/projects'" title="Projects"></BreadCrumbs>
     </div>
     <div class="flex flex-wrap gap-2 sm:gap-3">
-      <Button
-        variant="outline"
-        size="default"
-        @click="modalOpen = true"
-        class="gap-2 h-9 px-3 sm:h-10 sm:px-4"
-      >
+      <Button variant="outline" size="default" @click="modalOpen = true" class="gap-2 h-9 px-3 sm:h-10 sm:px-4">
         <i class="fa-solid fa-plus"></i><span class="hidden sm:inline"> Add Project</span>
       </Button>
       <div class="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="default"
-          class="gap-2 h-9 px-3 sm:h-10 sm:px-4"
-          @click="searchOpen = !searchOpen"
-        >
+        <Button variant="outline" size="default" class="gap-2 h-9 px-3 sm:h-10 sm:px-4"
+          @click="searchOpen = !searchOpen">
           <i class="fa-solid fa-magnifying-glass"></i>
           <span class="hidden sm:inline"> Search</span>
         </Button>
@@ -72,73 +61,47 @@ const statusFilterLabel = computed(() => {
             </Button>
           </template>
           <template #content>
-            <DropdownMenuItem
-              class="text-sm flex items-center gap-2 justify-center"
-              @select="
-                (event) => {
-                  event.preventDefault()
-                  handleStatusFilterChange('')
-                }
-              "
-            >
+            <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+              (event) => {
+                event.preventDefault()
+                handleStatusFilterChange('')
+              }
+            ">
               <span>All statuses</span>
-              <span
-                class="inline-block w-2 h-2 rounded-full bg-green-500"
-                v-if="statusFilter === ''"
-              ></span>
+              <span class="inline-block w-2 h-2 rounded-full bg-green-500" v-if="statusFilter === ''"></span>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              class="flex items-center gap-2 justify-center"
-              @select="
-                (event) => {
-                  event.preventDefault()
-                  handleStatusFilterChange('Completed')
-                }
-              "
-            >
+            <DropdownMenuItem class="flex items-center gap-2 justify-center" @select="
+              (event) => {
+                event.preventDefault()
+                handleStatusFilterChange('Completed')
+              }
+            ">
               <span>Completed</span>
-              <span
-                class="inline-block w-2 h-2 rounded-full bg-green-500"
-                v-if="statusFilter === 'Completed'"
-              ></span>
+              <span class="inline-block w-2 h-2 rounded-full bg-green-500" v-if="statusFilter === 'Completed'"></span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              class="flex items-center gap-2 justify-center"
-              @select="
-                (event) => {
-                  event.preventDefault()
-                  handleStatusFilterChange('In Progress')
-                }
-              "
-            >
+            <DropdownMenuItem class="flex items-center gap-2 justify-center" @select="
+              (event) => {
+                event.preventDefault()
+                handleStatusFilterChange('In Progress')
+              }
+            ">
               <span>In Progress</span>
-              <span
-                class="inline-block w-2 h-2 rounded-full bg-green-500"
-                v-if="statusFilter === 'In Progress'"
-              ></span>
+              <span class="inline-block w-2 h-2 rounded-full bg-green-500" v-if="statusFilter === 'In Progress'"></span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              class="flex items-center gap-2 justify-center"
-              @select="
-                (event) => {
-                  event.preventDefault()
-                  handleStatusFilterChange('Not Started')
-                }
-              "
-            >
+            <DropdownMenuItem class="flex items-center gap-2 justify-center" @select="
+              (event) => {
+                event.preventDefault()
+                handleStatusFilterChange('Not Started')
+              }
+            ">
               <span>Not Started</span>
-              <span
-                class="inline-block w-2 h-2 rounded-full bg-green-500"
-                v-if="statusFilter === 'Not Started'"
-              ></span>
+              <span class="inline-block w-2 h-2 rounded-full bg-green-500" v-if="statusFilter === 'Not Started'"></span>
             </DropdownMenuItem>
           </template>
         </AppDropdownMenu>
-        <span class="text-xs sm:text-sm text-muted-foreground"
-          >Filter: {{ statusFilterLabel }}</span
-        >
+        <span class="text-xs sm:text-sm text-muted-foreground">Filter: {{ statusFilterLabel }}</span>
       </div>
       <!-- sort -->
       <AppDropdownMenu :side="dropdownSide">
@@ -148,63 +111,48 @@ const statusFilterLabel = computed(() => {
           </Button>
         </template>
         <template #content>
-          <DropdownMenuItem
-            class="text-sm flex items-center gap-2 justify-center"
-            @select="
-              (event) => {
-                event.preventDefault()
-                handleSortChange('completed')
-              }
-            "
-          >
+          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+            (event) => {
+              event.preventDefault()
+              handleSortChange('completed')
+            }
+          ">
             <span>Completed</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            class="text-sm flex items-center gap-2 justify-center"
-            @select="
-              (event) => {
-                event.preventDefault()
-                handleSortChange('inProgress')
-              }
-            "
-          >
+          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+            (event) => {
+              event.preventDefault()
+              handleSortChange('inProgress')
+            }
+          ">
             <span>In Progress</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            class="text-sm flex items-center gap-2 justify-center"
-            @select="
-              (event) => {
-                event.preventDefault()
-                handleSortChange('notStarted')
-              }
-            "
-          >
+          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+            (event) => {
+              event.preventDefault()
+              handleSortChange('notStarted')
+            }
+          ">
             <span>Not Started</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            class="text-sm flex items-center gap-2 justify-center"
-            @select="
-              (event) => {
-                event.preventDefault()
-                handleSortChange('name')
-              }
-            "
-          >
+          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+            (event) => {
+              event.preventDefault()
+              handleSortChange('name')
+            }
+          ">
             <span>Name (A–Z)</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            class="text-sm flex items-center gap-2 justify-center"
-            @select="
-              (event) => {
-                event.preventDefault()
-                handleSortChange('progress')
-              }
-            "
-          >
+          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+            (event) => {
+              event.preventDefault()
+              handleSortChange('progress')
+            }
+          ">
             <span>Progress (high → low)</span>
           </DropdownMenuItem>
         </template>
@@ -236,6 +184,7 @@ const statusFilterLabel = computed(() => {
 .search-expand-leave-from {
   opacity: 1;
   transform: translateX(0) scale(1);
-  max-width: 16rem; /* matches w-64 */
+  max-width: 16rem;
+  /* matches w-64 */
 }
 </style>

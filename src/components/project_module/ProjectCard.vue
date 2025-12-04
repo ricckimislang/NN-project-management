@@ -1,6 +1,7 @@
 <script setup>
 // Imports
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
@@ -230,12 +231,9 @@ onUnmounted(() => {
             <!-- Responsive flex: column on mobile, row on md+ -->
             <div class="flex flex-col gap-2.5 sm:gap-3 md:flex-row md:gap-4">
               <!-- Image section -->
-              <div
-                class="flex justify-center md:justify-start md:items-center mb-3 sm:mb-4 md:mb-0"
-              >
+              <div class="flex justify-center md:justify-start md:items-center mb-3 sm:mb-4 md:mb-0">
                 <div
-                  class="w-full max-w-[120px] sm:max-w-40 md:w-36 md:h-36 lg:w-40 lg:h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center"
-                >
+                  class="w-full max-w-[120px] sm:max-w-40 md:w-36 md:h-36 lg:w-40 lg:h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center">
                   <AspectRatio :ratio="1 / 1">
                     <img class="w-full h-full object-cover" :src="project.image" alt="" />
                   </AspectRatio>
@@ -265,14 +263,9 @@ onUnmounted(() => {
                   </div>
                   <!-- Actions: static on mobile, absolute on desktop -->
                   <div
-                    class="flex items-center justify-between w-full mt-2 md:mt-0 md:w-auto md:absolute md:top-2 md:right-2 md:justify-end space-x-1 sm:space-x-2"
-                  >
-                    <Badge
-                      :variant="badgeVariant(project.status)"
-                      class="text-[10px] sm:text-xs capitalize"
-                    >
-                      {{ project.status }}</Badge
-                    >
+                    class="flex items-center justify-between w-full mt-2 md:mt-0 md:w-auto md:absolute md:top-2 md:right-2 md:justify-end space-x-1 sm:space-x-2">
+                    <Badge :variant="badgeVariant(project.status)" class="text-[10px] sm:text-xs capitalize">
+                      {{ project.status }}</Badge>
                     <div class="relative">
                       <AppDropdownMenu :side="dropdownSide">
                         <template #trigger>
@@ -281,14 +274,20 @@ onUnmounted(() => {
                           </Button>
                         </template>
                         <template #content>
-                          <DropdownMenuItem class="text-sm" @click="handleView(project)"
-                            >View</DropdownMenuItem
-                          >
-                          <DropdownMenuItem class="text-sm">Edit</DropdownMenuItem>
-                          <DropdownMenuItem
-                            class="text-destructive text-sm"
-                            @click="handleDelete(project.id)"
-                          >
+                          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center" @select="
+                            (event) => {
+                              event.preventDefault()
+                              handleView(project)
+                            }
+                          ">View</DropdownMenuItem>
+                          <RouterLink :href="'/project/' + project.id" target="_blank">
+                            <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Open in <i
+                                class="fa-solid fa-arrow-up-right-from-square"></i></DropdownMenuItem>
+                          </RouterLink>
+                          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem class="text-destructive text-sm flex items-center gap-2 justify-center"
+                            @click="handleDelete(project.id)">
                             Delete
                           </DropdownMenuItem>
                         </template>
@@ -342,11 +341,7 @@ onUnmounted(() => {
             <!-- Project Image -->
             <div class="lg:w-1/3">
               <div class="aspect-square rounded-lg overflow-hidden bg-muted">
-                <img
-                  :src="selectedProject.image"
-                  :alt="selectedProject.name"
-                  class="w-full h-full object-cover"
-                />
+                <img :src="selectedProject.image" :alt="selectedProject.name" class="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -436,19 +431,11 @@ onUnmounted(() => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div class="pt-2">
-                    <div
-                      v-if="selectedProject.workers && selectedProject.workers.length > 0"
-                      class="space-y-2"
-                    >
-                      <div
-                        v-for="worker in selectedProject.workers"
-                        :key="worker.id"
-                        class="flex items-center justify-between py-2 px-3 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors"
-                      >
+                    <div v-if="selectedProject.workers && selectedProject.workers.length > 0" class="space-y-2">
+                      <div v-for="worker in selectedProject.workers" :key="worker.id"
+                        class="flex items-center justify-between py-2 px-3 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors">
                         <div class="flex items-center space-x-3">
-                          <div
-                            class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"
-                          >
+                          <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                             <span class="text-primary font-medium text-xs">
                               {{
                                 worker.name
@@ -501,6 +488,7 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
