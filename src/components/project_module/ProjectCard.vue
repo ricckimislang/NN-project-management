@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
+// Data
 import { projectData } from '@/data/projectData'
 
 // Props
@@ -55,6 +56,7 @@ const dropdownSide = computed(() => (isBelowLg.value ? 'top' : 'bottom'))
 
 const projects = projectData
 const projectProgress = ref(projects.map((project) => project.progress))
+
 
 const animateProgress = (index, target) => {
   const duration = 300
