@@ -301,7 +301,7 @@ onMounted(() => {
         <Card class="p-6">
           <h3 class="font-semibold mb-4">Quick Actions</h3>
           <div class="space-y-2">
-            <Button variant="outline" class="w-full justify-start">
+            <Button variant="outline" class="w-full justify-start" @click="router.push(`/project/${projectId}/edit`)">
               <i class="fa-solid fa-pen mr-2"></i>Edit Project
             </Button>
             <Button variant="outline" class="w-full justify-start">

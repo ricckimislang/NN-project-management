@@ -286,8 +286,10 @@ onUnmounted(() => {
                             <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Open in <i
                                 class="fa-solid fa-arrow-up-right-from-square"></i></DropdownMenuItem>
                           </RouterLink>
-                          <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Edit
-                          </DropdownMenuItem>
+                          <RouterLink :to="'/project/' + project.id + '/edit'">
+                            <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Edit
+                            </DropdownMenuItem>
+                          </RouterLink>
                           <DropdownMenuItem class="text-destructive text-sm flex items-center gap-2 justify-center"
                             @click="handleDelete(project.id)">
                             Delete
