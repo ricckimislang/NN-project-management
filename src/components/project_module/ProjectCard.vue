@@ -96,8 +96,11 @@ const filteredProjects = computed(() => {
       return (
         project.name.toLowerCase().includes(query) ||
         project.category.toLowerCase().includes(query) ||
-        project.branch.toLowerCase().includes(query) ||
-        project.address.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query) ||
+        project.startDate.toLowerCase().includes(query) ||
+        project.endDate.toLowerCase().includes(query) ||
+        project.status.toLowerCase().includes(query) ||
+        project.progress.toLowerCase().includes(query) ||
         project.projectManager.toLowerCase().includes(query)
       )
     })
@@ -296,9 +299,9 @@ onUnmounted(() => {
                   <div class="flex flex-col justify-end flex-1 mt-3 sm:mt-4">
                     <div class="flex justify-between text-[11px] sm:text-xs mb-1">
                       <span>Progress</span>
-                      <span>{{ Math.round(projectProgress[index]) }}%</span>
+                      <span>{{ project.progress }}%</span>
                     </div>
-                    <Progress :value="projectProgress[index]" />
+                    <Progress :value="project.progress" />
                   </div>
                 </div>
               </div>
