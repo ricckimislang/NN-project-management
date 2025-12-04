@@ -73,7 +73,7 @@ onMounted(() => {
         <BreadCrumbs :url="'/projects'" title="Projects" :project-name="project?.name"></BreadCrumbs>
       </div>
       <div class="flex gap-2">
-        <Button variant="outline" @click="router.back()">
+        <Button variant="outline" @click="router.push('/projects')">
           <i class="fa-solid fa-arrow-left mr-2"></i>Back
         </Button>
       </div>
