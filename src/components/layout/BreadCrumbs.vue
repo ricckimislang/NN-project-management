@@ -18,6 +18,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  projectName: {
+    type: String,
+    default: null,
+  },
 })
 </script>
 
@@ -39,6 +43,10 @@ const props = defineProps({
           <BreadcrumbPage>
             <RouterLink :to="props.url">{{ props.title }} </RouterLink>
           </BreadcrumbPage>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator v-if="props.projectName" />
+        <BreadcrumbItem v-if="props.projectName">
+          <BreadcrumbPage>{{ props.projectName }}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

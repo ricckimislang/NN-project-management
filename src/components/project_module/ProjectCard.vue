@@ -282,7 +282,7 @@ onUnmounted(() => {
                               handleView(project)
                             }
                           ">View</DropdownMenuItem>
-                          <RouterLink :href="'/project/' + project.id" target="_blank">
+                          <RouterLink :to="'/project/' + project.id">
                             <DropdownMenuItem class="text-sm flex items-center gap-2 justify-center">Open in <i
                                 class="fa-solid fa-arrow-up-right-from-square"></i></DropdownMenuItem>
                           </RouterLink>
@@ -474,6 +474,12 @@ onUnmounted(() => {
           <DialogClose asChild>
             <Button variant="secondary">Close</Button>
           </DialogClose>
+          <Button variant="outline">
+            <RouterLink :to="'/project/' + selectedProject.id">
+              Open in
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </RouterLink>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

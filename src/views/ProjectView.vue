@@ -70,7 +70,7 @@ onMounted(() => {
     <!-- Toolbar -->
     <div class="toolbar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
       <div>
-        <BreadCrumbs :url="'/projects'" title="Projects"></BreadCrumbs>
+        <BreadCrumbs :url="'/projects'" title="Projects" :project-name="project?.name"></BreadCrumbs>
       </div>
       <div class="flex gap-2">
         <Button variant="outline" @click="router.back()">
@@ -98,7 +98,7 @@ onMounted(() => {
                 <h1 class="text-3xl font-bold">{{ project.name }}</h1>
                 <p class="text-gray-600">{{ project.description }}</p>
               </div>
-              <Badge :variant="statusColor === 'success' ? 'default' : 'secondary'">
+              <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
                 {{ project.status }}
               </Badge>
             </div>
@@ -205,7 +205,7 @@ onMounted(() => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <p class="text-sm text-gray-600">Status</p>
-                        <Badge :variant="statusColor === 'success' ? 'default' : 'secondary'">
+                        <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
                           {{ project.status }}
                         </Badge>
                       </div>
@@ -274,7 +274,7 @@ onMounted(() => {
           <div class="space-y-4">
             <div class="flex justify-between items-center py-2 border-b">
               <span class="text-sm text-gray-600">Status</span>
-              <Badge :variant="statusColor === 'success' ? 'default' : 'secondary'">
+              <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
                 {{ project.status }}
               </Badge>
             </div>
