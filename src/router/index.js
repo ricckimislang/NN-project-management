@@ -27,6 +27,11 @@ const router = createRouter({
       name: 'projectEdit',
       component: ProjectEditView,
     },
+    {
+      path: '/team',
+      name: 'team',
+      component: () => import('@/views/TeamView.vue'),
+    }
   ],
 })
 
