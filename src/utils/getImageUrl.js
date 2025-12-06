@@ -1,11 +1,11 @@
 // Preload all images so Vite bundles them.
-const images = import.meta.glob('../assets/images/**/*.{png,jpg,jpeg,svg}', { eager: true })
+const images = import.meta.glob('../public/images/**/*.{png,jpg,jpeg,svg}', { eager: true })
 
 // Convert the glob result to an object keyed by the *relative path* inside assets/images
 const imageMap = {}
 for (const fullPath in images) {
   // fullPath looks like '../assets/images/projects/project-1.jpg'
-  const relativePath = fullPath.replace('../assets/images/', '')
+  const relativePath = fullPath.replace('../public/images/', '')
   imageMap[relativePath] = images[fullPath].default
 }
 
@@ -17,3 +17,4 @@ export const getImageUrl = (path) => {
   const filename = path.split('/').pop()
   return imageMap[filename] || ''
 }
+

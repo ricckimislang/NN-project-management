@@ -27,8 +27,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-// Data
-import { projectData } from '@/data/projectData'
+// Services
+import { projectService } from '@/services/ProjectServices'
 
 // Props
 const props = defineProps({
@@ -54,8 +54,8 @@ const breakpoints = useBreakpoints({ sm: 640, md: 768, lg: 1024, xl: 1280, '2xl'
 const isBelowLg = breakpoints.smaller('lg')
 const dropdownSide = computed(() => (isBelowLg.value ? 'top' : 'bottom'))
 
-const projects = projectData
-const projectProgress = ref(projects.map((project) => project.progress))
+const projects = ref([])
+const projectProgress = ref([])
 
 
 const animateProgress = (index, target) => {
@@ -88,7 +88,7 @@ const filteredProjects = computed(() => {
   const query = props.searchQuery.trim().toLowerCase()
   const status = props.statusFilter
 
-  let result = [...projects]
+  let result = [...projects.value]
 
   if (status) {
     result = result.filter((project) => project.status === status)
@@ -100,11 +100,11 @@ const filteredProjects = computed(() => {
         project.name.toLowerCase().includes(query) ||
         project.category.toLowerCase().includes(query) ||
         project.description.toLowerCase().includes(query) ||
-        project.startDate.toLowerCase().includes(query) ||
-        project.endDate.toLowerCase().includes(query) ||
+        project.start_date.toLowerCase().includes(query) ||
+        project.end_date.toLowerCase().includes(query) ||
         project.status.toLowerCase().includes(query) ||
         project.progress.toLowerCase().includes(query) ||
-        project.projectManager.toLowerCase().includes(query)
+        project.project_manager.toLowerCase().includes(query)
       )
     })
   }
@@ -183,7 +183,24 @@ const confirmDelete = (projectId) => {
   selectedProject.value = null
 }
 
-onMounted(() => {
+const fetchProjects = async () => {
+  // Fetch once from service
+  try {
+    const response = await projectService.getProjects()
+    const data = response.data ?? []
+    projects.value = data
+    projectProgress.value = projects.value.map((project) => project.progress ?? 0)
+  } catch (error) {
+    console.error('Failed to load projects:', error)
+    projects.value = []
+    projectProgress.value = []
+  }
+}
+
+
+onMounted(async () => {
+  fetchProjects()
+
   // Get the scrollable viewport
   const viewport = scrollArea.value.$el.querySelector('[data-slot="scroll-area-viewport"]')
 
@@ -210,7 +227,7 @@ onMounted(() => {
     },
   )
 
-  projects.forEach((project, index) => {
+  projects.value.forEach((project, index) => {
     setTimeout(() => {
       animateProgress(index, project.progress)
     }, index * 100) // slight delay between each animation
@@ -237,7 +254,7 @@ onUnmounted(() => {
                 <div
                   class="w-full max-w-[120px] sm:max-w-40 md:w-36 md:h-36 lg:w-40 lg:h-40 overflow-hidden rounded-lg bg-muted flex items-center justify-center">
                   <AspectRatio :ratio="1 / 1">
-                    <img class="w-full h-full object-cover" :src="project.image" alt="" />
+                    <img class="w-full h-full object-cover" :src="project.image_path" alt="" />
                   </AspectRatio>
                 </div>
               </div>
@@ -257,10 +274,10 @@ onUnmounted(() => {
                       {{ project.branch }}, {{ project.address }}
                     </p>
                     <p class="text-[11px] sm:text-xs text-muted-foreground">
-                      📅 {{ project.startDate }} - {{ project.endDate }}
+                      📅 {{ project.start_date }} - {{ project.end_date }}
                     </p>
                     <p class="text-[11px] sm:text-xs md:text-sm text-muted-foreground">
-                      👥 <span class="font-semibold">{{ project.projectManager }}</span>
+                      👥 <span class="font-semibold">{{ project.project_manager }}</span>
                     </p>
                   </div>
                   <!-- Actions: static on mobile, absolute on desktop -->
@@ -345,7 +362,7 @@ onUnmounted(() => {
             <!-- Project Image -->
             <div class="lg:w-1/3">
               <div class="aspect-square rounded-lg overflow-hidden bg-muted">
-                <img :src="selectedProject.image" :alt="selectedProject.name" class="w-full h-full object-cover" />
+                <img :src="selectedProject.image_path" :alt="selectedProject.name" class="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -367,7 +384,7 @@ onUnmounted(() => {
                 </div>
                 <div>
                   <h3 class="text-sm font-medium text-muted-foreground mb-1">Project Manager</h3>
-                  <p class="text-base">{{ selectedProject.projectManager }}</p>
+                  <p class="text-base">{{ selectedProject.project_manager }}</p>
                 </div>
                 <div>
                   <h3 class="text-sm font-medium text-muted-foreground mb-1">Location</h3>
@@ -378,7 +395,7 @@ onUnmounted(() => {
                 <div>
                   <h3 class="text-sm font-medium text-muted-foreground mb-1">Duration</h3>
                   <p class="text-base">
-                    {{ selectedProject.startDate }} - {{ selectedProject.endDate }}
+                    {{ selectedProject.start_date }} - {{ selectedProject.end_date }}
                   </p>
                 </div>
               </div>

@@ -1,9 +1,9 @@
 <?php
 
-$host = $_ENV['MYSQL_HOST'];
-$user = $_ENV['MYSQL_USER'];
-$pass = $_ENV['MYSQL_PASSWORD'];
-$db   = $_ENV['MYSQL_DB'];
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db   = 'nn-project-management';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
