@@ -49,5 +49,16 @@ export const projectService = {
       console.error('Error deleting project:', error)
       throw error
     }
+  },
+
+  // view project
+  async showProject(projectId){
+    try{
+      const response = await http.get(`/project?id=${projectId}`)
+      return response.data
+    } catch (error){
+      console.error('Error fetching project:', error)
+      throw error
+    }
   }
 }

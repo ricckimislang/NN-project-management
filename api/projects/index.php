@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require '../db_con.php';
-require 'projectService.php';
+require 'projectsService.php';
 require '../api_headers.php';
 
 handlePreflight();

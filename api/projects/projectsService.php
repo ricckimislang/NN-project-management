@@ -3,7 +3,7 @@
 function getProjects() {
     global $pdo;
 
-    $stmt = $pdo->query("SELECT p.*, e.name AS project_manager FROM projects p LEFT JOIN project_assignments pa on p.id = pa.project_id LEFT JOIN employees e on pa.employee_id = e.id");
+    $stmt = $pdo->query("SELECT p.*, e.name AS project_manager FROM projects p LEFT JOIN project_assignments pa on p.id = pa.project_id LEFT JOIN employees e on pa.employee_id = e.id WHERE pa.role_id = 1");
     $projects = $stmt->fetchAll();
 
     return [

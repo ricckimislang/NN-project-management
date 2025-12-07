@@ -8,7 +8,8 @@ import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import BreadCrumbs from '@/components/layout/BreadCrumbs.vue'
-import { projectData } from '@/data/projectData'
+
+import { projectService } from '@/services/ProjectServices'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,6 +17,7 @@ const router = useRouter()
 // State
 const project = ref(null)
 const loading = ref(true)
+const error = ref(null)
 
 // Computed
 const projectId = computed(() => parseInt(route.params.id))
@@ -28,20 +30,26 @@ const statusColor = computed(() => {
   return 'secondary'
 })
 
-// Methods
-const loadProject = () => {
-  loading.value = true
-  // Simulate API call delay
-  setTimeout(() => {
-    const foundProject = projectData.find(p => p.id === projectId.value)
-    if (foundProject) {
-      project.value = foundProject
-    } else {
-      router.push('/projects')
-    }
+// methods
+const showProject = async () => {
+  try{
+    loading.value = true
+    error.value = null
+    const response = await projectService.showProject(projectId.value)
+    project.value = response.data
     loading.value = false
-  }, 300)
+  } catch (error){
+    console.error('Error fetching project:', error)
+    error.value = 'Failed to load project. Please try again.'
+    loading.value = false
+    // Optional: redirect after a delay
+    setTimeout(() => {
+      router.push('/projects')
+    }, 3000)
+  }
 }
+
+
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -61,12 +69,32 @@ const calculateDuration = () => {
 
 // Lifecycle
 onMounted(() => {
-  loadProject()
+  showProject()
 })
 </script>
 
 <template>
-  <div v-if="!loading" class="space-y-6">
+  <!-- Error State -->
+  <div v-if="error" class="flex items-center justify-center py-12">
+    <div class="text-center">
+      <div class="inline-block text-red-500 mb-4">
+        <i class="fa-solid fa-exclamation-triangle text-4xl"></i>
+      </div>
+      <p class="text-red-600 font-medium mb-2">{{ error }}</p>
+      <p class="text-gray-600 text-sm">Redirecting to projects list...</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div v-else-if="loading" class="flex items-center justify-center py-12">
+    <div class="text-center">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+      <p class="text-gray-600">Loading project details...</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div v-else class="space-y-6">
     <!-- Toolbar -->
     <div class="toolbar flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
       <div>
@@ -86,7 +114,7 @@ onMounted(() => {
         <!-- Project Image -->
         <Card class="overflow-hidden">
           <AspectRatio :ratio="16 / 9">
-            <img :src="project.image" :alt="project.name" class="w-full h-full object-cover" />
+            <img :src="project?.image_path" :alt="project?.name" class="w-full h-full object-cover" />
           </AspectRatio>
         </Card>
 
@@ -95,11 +123,11 @@ onMounted(() => {
           <div class="space-y-4">
             <div class="flex items-start justify-between gap-4">
               <div class="space-y-2 flex-1">
-                <h1 class="text-3xl font-bold">{{ project.name }}</h1>
-                <p class="text-gray-600">{{ project.description }}</p>
+                <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
+                <p class="text-gray-600">{{ project?.description }}</p>
               </div>
               <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
-                {{ project.status }}
+                {{ project?.status }}
               </Badge>
             </div>
 
@@ -107,11 +135,11 @@ onMounted(() => {
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t">
               <div>
                 <p class="text-sm text-gray-600">Category</p>
-                <p class="font-semibold">{{ project.category }}</p>
+                <p class="font-semibold">{{ project?.category }}</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Branch</p>
-                <p class="font-semibold">{{ project.branch }}</p>
+                <p class="font-semibold">{{ project?.branch }}</p>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Progress</p>
@@ -161,11 +189,11 @@ onMounted(() => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <p class="text-sm text-gray-600">Address</p>
-                        <p class="font-medium">{{ project.address }}</p>
+                        <p class="font-medium">{{ project?.address }}</p>
                       </div>
                       <div>
                         <p class="text-sm text-gray-600">Branch</p>
-                        <p class="font-medium">{{ project.branch }}</p>
+                        <p class="font-medium">{{ project?.branch }}</p>
                       </div>
                     </div>
                   </div>
@@ -206,12 +234,12 @@ onMounted(() => {
                       <div>
                         <p class="text-sm text-gray-600">Status</p>
                         <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
-                          {{ project.status }}
+                          {{ project?.status }}
                         </Badge>
                       </div>
                       <div>
                         <p class="text-sm text-gray-600">Progress</p>
-                        <p class="font-medium">{{ project.progress }}%</p>
+                        <p class="font-medium">{{ project?.progress }}%</p>
                       </div>
                     </div>
                   </div>
@@ -231,7 +259,7 @@ onMounted(() => {
                     Project Manager
                   </h3>
                   <div class="ml-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p class="font-medium">{{ project.projectManager }}</p>
+                    <p class="font-medium">{{ project?.project_manager }}</p>
                   </div>
                 </div>
 
@@ -239,10 +267,10 @@ onMounted(() => {
                 <div class="border-t pt-6">
                   <h3 class="font-semibold mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-users text-green-500"></i>
-                    Team Members ({{ project.workers.length }})
+                    Team Members ({{ project?.workers?.length || 0 }})
                   </h3>
                   <div class="ml-6 space-y-3">
-                    <div v-for="worker in project.workers" :key="worker.id"
+                    <div v-for="worker in (project?.workers || [])" :key="worker.id"
                       class="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                       <div class="flex items-start justify-between gap-4">
                         <div class="flex-1">
@@ -275,24 +303,24 @@ onMounted(() => {
             <div class="flex justify-between items-center py-2 border-b">
               <span class="text-sm text-gray-600">Status</span>
               <Badge :variant="statusColor === 'success' ? 'success' : 'secondary'">
-                {{ project.status }}
+                {{ project?.status }}
               </Badge>
             </div>
             <div class="flex justify-between items-center py-2 border-b">
               <span class="text-sm text-gray-600">Progress</span>
-              <span class="font-semibold">{{ project.progress }}%</span>
+              <span class="font-semibold">{{ project?.progress }}%</span>
             </div>
             <div class="flex justify-between items-center py-2 border-b">
               <span class="text-sm text-gray-600">Category</span>
-              <span class="font-medium text-sm">{{ project.category }}</span>
+              <span class="font-medium text-sm">{{ project?.category }}</span>
             </div>
             <div class="flex justify-between items-center py-2 border-b">
               <span class="text-sm text-gray-600">Team Size</span>
-              <span class="font-semibold">{{ project.workers.length }} members</span>
+              <span class="font-semibold">{{ project?.workers?.length || 0 }} members</span>
             </div>
             <div class="flex justify-between items-center py-2">
               <span class="text-sm text-gray-600">Manager</span>
-              <span class="font-medium text-sm">{{ project.projectManager }}</span>
+              <span class="font-medium text-sm">{{ project?.project_manager }}</span>
             </div>
           </div>
         </Card>
@@ -313,14 +341,6 @@ onMounted(() => {
           </div>
         </Card>
       </div>
-    </div>
-  </div>
-
-  <!-- Loading State -->
-  <div v-else class="flex items-center justify-center py-12">
-    <div class="text-center">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-      <p class="text-gray-600">Loading project details...</p>
     </div>
   </div>
 </template>
