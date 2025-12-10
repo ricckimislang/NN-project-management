@@ -283,7 +283,7 @@ onUnmounted(() => {
                   <!-- Actions: static on mobile, absolute on desktop -->
                   <div
                     class="flex items-center justify-between w-full mt-2 md:mt-0 md:w-auto md:absolute md:top-2 md:right-2 md:justify-end space-x-1 sm:space-x-2">
-                    <Badge :variant="badgeVariant(project.status)" class="text-[10px] sm:text-xs capitalize">
+                    <Badge :variant="badgeVariant(project.status)" class="text-[10px] sm:text-xs uppercase">
                       {{ project.status }}</Badge>
                     <div class="relative">
                       <AppDropdownMenu :side="dropdownSide">
